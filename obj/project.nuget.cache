@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "4GUkp+ttEioSv2LTQitgCCmP63reWKi/rI9NDq2GnJ9fbnwkukcI9EmO5QV+KkIVktIflBv+bLIDp8oqzVZinA==",
+  "dgSpecHash": "2CqRGXr8zSMe24CMd12rHzJrvPdzu//7AMh7t/x5+0P0HI9aRZv5XSx65YVCgA1rf7rXchu/hgofwrVCTOsFCg==",
   "success": true,
-  "projectFilePath": "/Users/dashauncarter/fun/dotnetredis/dotnetredis.csproj",
+  "projectFilePath": "/Users/dashauncarter/fun/dashaun/dotnetredis-wip/dotnetredis.csproj",
   "expectedPackageFiles": [
     "/Users/dashauncarter/.nuget/packages/aspnetcore.healthchecks.redis/5.0.2/aspnetcore.healthchecks.redis.5.0.2.nupkg.sha512",
     "/Users/dashauncarter/.nuget/packages/microsoft.extensions.apidescription.server/3.0.0/microsoft.extensions.apidescription.server.3.0.0.nupkg.sha512",

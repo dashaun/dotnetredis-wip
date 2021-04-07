@@ -1622,11 +1622,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/dashauncarter/fun/dotnetredis/dotnetredis.csproj",
+      "projectUniqueName": "/Users/dashauncarter/fun/dashaun/dotnetredis-wip/dotnetredis.csproj",
       "projectName": "dotnetredis",
-      "projectPath": "/Users/dashauncarter/fun/dotnetredis/dotnetredis.csproj",
+      "projectPath": "/Users/dashauncarter/fun/dashaun/dotnetredis-wip/dotnetredis.csproj",
       "packagesPath": "/Users/dashauncarter/.nuget/packages/",
-      "outputPath": "/Users/dashauncarter/fun/dotnetredis/obj/",
+      "outputPath": "/Users/dashauncarter/fun/dashaun/dotnetredis-wip/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/Users/dashauncarter/.nuget/NuGet/NuGet.Config"
