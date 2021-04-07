@@ -26,20 +26,28 @@ namespace dotnetredis
 
         private static IConfigurationRoot Configuration { get; set; }
 
-        private static ConnectionMultiplexer Connection => _lazyConnection.Value;
+        public static ConnectionMultiplexer Connection
+        {
+            get
+            {
+                return _lazyConnection.Value;
+            }
+        }
 
-        private static TimeSpan ReconnectMinFrequency => TimeSpan.FromSeconds(60);
+        public static TimeSpan ReconnectMinFrequency => TimeSpan.FromSeconds(60);
 
-        private static TimeSpan ReconnectErrorThreshold => TimeSpan.FromSeconds(30);
+        public static TimeSpan ReconnectErrorThreshold => TimeSpan.FromSeconds(30);
 
-        private static int RetryMaxAttempts => 5;
+        public static int RetryMaxAttempts => 5;
 
         public static void Main(string[] args)
         {
+            InitializeConfiguration();
+            IDatabase cache = GetDatabase();
             CreateHostBuilder(args).Build().Run();
         }
 
-        private static IHostBuilder CreateHostBuilder(string[] args)
+        public static IHostBuilder CreateHostBuilder(string[] args)
         {
             return Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder => { webBuilder.UseStartup<Startup>(); });
@@ -53,11 +61,11 @@ namespace dotnetredis
             Configuration = builder.Build();
         }
 
-        private static Lazy<ConnectionMultiplexer> CreateConnection()
+        public static Lazy<ConnectionMultiplexer> CreateConnection()
         {
             return new(() =>
             {
-                var cacheConnection = Configuration[SecretName];
+                string cacheConnection = Configuration[SecretName];
                 return ConnectionMultiplexer.Connect(cacheConnection);
             });
         }

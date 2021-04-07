@@ -12,5 +12,6 @@ namespace dotnetredis.Models
         public double Price { get; set; }
         public string Currency { get; set; }
         public string InfoLink { get; set; }
+        public string[] Authors { get; set; }
     }
 }
