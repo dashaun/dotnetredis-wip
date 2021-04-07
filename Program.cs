@@ -210,7 +210,15 @@ namespace dotnetredis
             {
                 HashEntry entry = hashEntries.FirstOrDefault(g => g.Name.ToString().Equals(property.Name));
                 if (entry.Equals(new HashEntry())) continue;
-                property.SetValue(obj, Convert.ChangeType(entry.Value.ToString(), property.PropertyType));
+                if (property.PropertyType == typeof(System.String[]))
+                {
+                    String[] blah = new []{entry.Value.ToString()};
+                    property.SetValue(obj, Convert.ChangeType(blah, property.PropertyType));
+                }
+                else 
+                { 
+                    property.SetValue(obj, Convert.ChangeType(entry.Value.ToString(), property.PropertyType));
+                }
             }
             return (T)obj;
         }

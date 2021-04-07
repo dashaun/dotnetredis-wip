@@ -1,3 +1,4 @@
+using System;
 using dotnetredis.Models;
 using Microsoft.AspNetCore.Mvc;
 using StackExchange.Redis;
@@ -36,6 +37,7 @@ namespace dotnetredis.Controllers
             Book book = new Book();
             RedisKey bookKey = new RedisKey(book.GetType().Name + ":" + id);
             HashEntry[] bookHash = Program.GetDatabase().HashGetAll(bookKey);
+            Console.WriteLine("BookHash  =" + string.Join(",",bookHash));
             return Program.ConvertFromRedis<Book>(bookHash);
         }
         
