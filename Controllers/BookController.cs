@@ -53,6 +53,16 @@ namespace dotnetredis.Controllers
         [Route("createIndex")]
         public void CreateIndex()
         {
+            RedisKey booksSearchIndexName = "books-idx";
+            Client client = new Client(booksSearchIndexName, Program.GetDatabase());
+            try
+            {
+                client.DropIndex();
+            }
+            catch
+            {
+                // OK if the index didn't already exist.
+            }
             Schema sch = new Schema();
             sch.AddSortableTextField("Title");
             sch.AddTextField("Subtitle");
@@ -62,9 +72,7 @@ namespace dotnetredis.Controllers
                 new Client.IndexDefinition( 
                     prefixes: new []{new Book().GetType().Name + ":" })
                 );
-            RedisKey booksSearchIndexName = "books-idx";
-            Client _client = new Client(booksSearchIndexName, Program.GetDatabase());
-            _client.CreateIndex(sch, options);
+            client.CreateIndex(sch, options);
         }
     }
 }
