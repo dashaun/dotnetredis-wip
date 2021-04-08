@@ -34,10 +34,8 @@ namespace dotnetredis.Controllers
         [Route("read")]
         public Book Get(string id)
         {
-            Book book = new Book();
-            RedisKey bookKey = new RedisKey(book.GetType().Name + ":" + id);
+            RedisKey bookKey = new RedisKey(new Book().GetType().Name + ":" + id);
             HashEntry[] bookHash = Program.GetDatabase().HashGetAll(bookKey);
-            Console.WriteLine("BookHash  =" + string.Join(",",bookHash));
             return Program.ConvertFromRedis<Book>(bookHash);
         }
         
