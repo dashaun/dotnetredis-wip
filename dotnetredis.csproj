@@ -8,7 +8,9 @@
   <ItemGroup>
     <PackageReference Include="AspNetCore.HealthChecks.Redis" Version="5.0.2" />
     <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="5.0.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="NRediSearch" Version="2.2.3" />
+    <PackageReference Include="NReJSON" Version="3.2.0" />
     <PackageReference Include="StackExchange.Redis" Version="2.2.4" />
     <PackageReference Include="StackExchange.Redis.Extensions.AspNetCore" Version="6.4.5" />
     <PackageReference Include="StackExchange.Redis.Extensions.Newtonsoft" Version="6.4.5" />
