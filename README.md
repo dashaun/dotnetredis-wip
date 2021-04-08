@@ -2,7 +2,7 @@
 
 * As close as possible to redi2read
 * StackExchange client for basic datatypes
-* NRediSearch for RediSearch
+* NRediSearch 2.2.3
 * NRedisGraph for RedisGraph
 * NReJSON for RedisJSON
 
