@@ -1,7 +1,7 @@
 using dotnetredis.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
 using NRediSearch;
-using StackExchange.Redis;
 
 namespace dotnetredis.Controllers
 {
@@ -27,15 +27,18 @@ namespace dotnetredis.Controllers
 
         [HttpGet]
         [Route("read")]
-        public Book Get(string id)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public IActionResult Get(string id)
         {
             var db = Program.GetDatabase();
             var bookKey = $"Book:{id}";
 
             var bookHash = db.HashGetAll(bookKey);
-            var book = Program.ConvertFromRedis<Book>(bookHash);
+            if (bookHash.Length == 0) return NotFound();
 
-            return book;
+            var book = Program.ConvertFromRedis<Book>(bookHash);
+            return Ok(book);
         }
 
         [HttpPost]

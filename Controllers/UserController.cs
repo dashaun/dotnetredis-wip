@@ -1,6 +1,6 @@
 using dotnetredis.Models;
 using Microsoft.AspNetCore.Mvc;
-using StackExchange.Redis;
+using Microsoft.AspNetCore.Http;
 
 namespace dotnetredis.Controllers
 {
@@ -13,18 +13,30 @@ namespace dotnetredis.Controllers
         [Route("create")]
         public void Create(User user)
         {
+            var db = Program.GetDatabase();
+            var key = $"User:{user.Id}";
+
             user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
-            RedisKey userKey = new RedisKey(user.GetType().Name + ":" + user.Id);
-            Program.GetDatabase().HashSet(userKey, Program.ToHashEntries(user));
+            var userHash = Program.ToHashEntries(user);
+
+            db.HashSet(key, userHash);
         }
 
         [HttpGet]
         [Route("read")]
-        public User Get(string id)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public IActionResult Get(string id)
         {
-            RedisKey userKey = new RedisKey(new User().GetType().Name + ":" + id);
-            HashEntry[] userHashEntries = Program.GetDatabase().HashGetAll(userKey);
-            return Program.ConvertFromRedis<User>(userHashEntries);
+            var db = Program.GetDatabase();
+            var key = $"User:{id}";
+
+            var userHash = db.HashGetAll(key);
+            if (userHash.Length == 0) return NotFound();
+            
+            var user = Program.ConvertFromRedis<User>(userHash);
+
+            return Ok(user);
         }
 
         [HttpPost]

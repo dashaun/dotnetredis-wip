@@ -5,7 +5,6 @@ using Newtonsoft.Json;
 using Microsoft.AspNetCore.Http;
 using System.Linq;
 
-
 namespace dotnetredis.Controllers
 {
     [ApiController]
