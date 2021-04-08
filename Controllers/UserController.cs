@@ -5,17 +5,10 @@ using StackExchange.Redis;
 namespace dotnetredis.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("/api/users")]
     public class UserController : Controller
     {
 
-        [HttpGet]
-        [Route("empty")]
-        public User GetEmpty()
-        {
-            return new User();
-        }
-        
         [HttpPost]
         [Route("create")]
         public void Create(User user)
@@ -24,7 +17,7 @@ namespace dotnetredis.Controllers
             RedisKey userKey = new RedisKey(user.GetType().Name + ":" + user.Id);
             Program.GetDatabase().HashSet(userKey, Program.ToHashEntries(user));
         }
-        
+
         [HttpGet]
         [Route("read")]
         public User Get(string id)
@@ -33,14 +26,14 @@ namespace dotnetredis.Controllers
             HashEntry[] userHashEntries = Program.GetDatabase().HashGetAll(userKey);
             return Program.ConvertFromRedis<User>(userHashEntries);
         }
-        
+
         [HttpPost]
         [Route("load")]
         public void Load(User[] users)
         {
             foreach (var user in users)
             {
-                Create(user);   
+                Create(user);
             }
         }
     }

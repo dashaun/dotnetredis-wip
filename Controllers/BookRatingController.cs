@@ -7,16 +7,9 @@ using StackExchange.Redis.Extensions.Core.Abstractions;
 namespace dotnetredis.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("/api/ratings")]
     public class BookRatingController
     {
-        [HttpGet]
-        [Route("empty")]
-        public BookRating GetEmpty()
-        {
-            return new BookRating();
-        }
-
         [HttpPost]
         [Route("create")]
         public void Create(BookRating book)

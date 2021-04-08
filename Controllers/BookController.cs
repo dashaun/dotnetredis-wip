@@ -6,27 +6,22 @@ using StackExchange.Redis;
 namespace dotnetredis.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("/api/books")]
     public class BookController : ControllerBase
     {
-
-        [HttpGet]
-        [Route("empty")]
-        public Book GetEmpty()
-        {
-            return new();
-        }
 
         [HttpPost]
         [Route("create")]
         public void Create(Book book)
         {
-            RedisKey bookKey = new RedisKey(book.GetType().Name + ":" + book.Id);
-            Program.GetDatabase().HashSet(bookKey, Program.ToHashEntries(book));
-            RedisKey bookAuthors = new RedisKey(book.GetType().Name + ":" + book.Id + ":authors");
+            var db = Program.GetDatabase();
+            var bookKey = $"Book:{book.Id}";
+            var bookAuthorsKey = $"{bookKey}:authors";
+
+            db.HashSet(bookKey, Program.ToHashEntries(book));
             foreach (var author in book.Authors)
             {
-                Program.GetDatabase().SetAdd(bookAuthors,author);
+                db.SetAdd(bookAuthorsKey, author);
             }
         }
 
@@ -34,45 +29,49 @@ namespace dotnetredis.Controllers
         [Route("read")]
         public Book Get(string id)
         {
-            RedisKey bookKey = new RedisKey(new Book().GetType().Name + ":" + id);
-            HashEntry[] bookHash = Program.GetDatabase().HashGetAll(bookKey);
-            return Program.ConvertFromRedis<Book>(bookHash);
+            var db = Program.GetDatabase();
+            var bookKey = $"Book:{id}";
+
+            var bookHash = db.HashGetAll(bookKey);
+            var book = Program.ConvertFromRedis<Book>(bookHash);
+
+            return book;
         }
-        
+
         [HttpPost]
         [Route("load")]
         public void Load(Book[] books)
         {
             foreach (var book in books)
             {
-                Create(book);   
+                Create(book);
             }
         }
-        
+
         [HttpGet]
         [Route("createIndex")]
         public void CreateIndex()
         {
-            RedisKey booksSearchIndexName = "books-idx";
-            Client client = new Client(booksSearchIndexName, Program.GetDatabase());
+            Client client = new Client("books-idx", Program.GetDatabase());
+
+            // drop the index, if it doesn't exists, that's fine
             try
             {
                 client.DropIndex();
             }
-            catch
-            {
-                // OK if the index didn't already exist.
-            }
-            Schema sch = new Schema();
-            sch.AddSortableTextField("Title");
-            sch.AddTextField("Subtitle");
-            sch.AddTextField("Description");
-            sch.AddTextField("Authors");
+            catch {}
+
+            var schema = new Schema();
+            schema.AddSortableTextField("Title");
+            schema.AddTextField("Subtitle");
+            schema.AddTextField("Description");
+            schema.AddTextField("Authors");
+
             Client.ConfiguredIndexOptions options = new Client.ConfiguredIndexOptions(
-                new Client.IndexDefinition( 
-                    prefixes: new []{new Book().GetType().Name + ":" })
-                );
-            client.CreateIndex(sch, options);
+                new Client.IndexDefinition( prefixes: new [] { "Book:" } )
+            );
+
+            client.CreateIndex(schema, options);
         }
     }
 }
