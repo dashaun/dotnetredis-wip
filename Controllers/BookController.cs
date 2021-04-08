@@ -1,6 +1,6 @@
-using System;
 using dotnetredis.Models;
 using Microsoft.AspNetCore.Mvc;
+using NRediSearch;
 using StackExchange.Redis;
 
 namespace dotnetredis.Controllers
@@ -47,6 +47,24 @@ namespace dotnetredis.Controllers
             {
                 Create(book);   
             }
+        }
+        
+        [HttpGet]
+        [Route("createIndex")]
+        public void CreateIndex()
+        {
+            Schema sch = new Schema();
+            sch.AddSortableTextField("Title");
+            sch.AddTextField("Subtitle");
+            sch.AddTextField("Description");
+            sch.AddTextField("Authors");
+            Client.ConfiguredIndexOptions options = new Client.ConfiguredIndexOptions(
+                new Client.IndexDefinition( 
+                    prefixes: new []{new Book().GetType().Name + ":" })
+                );
+            RedisKey booksSearchIndexName = "books-idx";
+            Client _client = new Client(booksSearchIndexName, Program.GetDatabase());
+            _client.CreateIndex(sch, options);
         }
     }
 }
