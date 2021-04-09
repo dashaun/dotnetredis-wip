@@ -29,10 +29,8 @@ namespace dotnetredis
 
             //Add Serializer configured for Redis
             //JSON config for Redis instance
-            services.AddStackExchangeRedisExtensions<NewtonsoftSerializer>(options =>
-            {
-                return Configuration.GetSection("Redis").Get<RedisConfiguration>();
-            });
+            services.AddStackExchangeRedisExtensions<NewtonsoftSerializer>(options 
+                => Configuration.GetSection("Redis").Get<RedisConfiguration>());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -193,7 +193,14 @@ namespace dotnetredis
                         }
                         else
                         {
-                            hashValue = propertyValue.ToString();
+                            if (propertyValue != null)
+                            {
+                                hashValue = propertyValue.ToString();
+                            }
+                            else
+                            {
+                                return new HashEntry(property.Name, RedisValue.Null);
+                            }
                         }
 
                         return new HashEntry(property.Name, hashValue);
@@ -210,9 +217,9 @@ namespace dotnetredis
             {
                 HashEntry entry = hashEntries.FirstOrDefault(g => g.Name.ToString().Equals(property.Name));
                 if (entry.Equals(new HashEntry())) continue;
-                if (property.PropertyType == typeof(System.String[]))
+                if (property.PropertyType == typeof(String[]))
                 {
-                    String[] blah = new []{entry.Value.ToString()};
+                    String[] blah = {entry.Value.ToString()};
                     property.SetValue(obj, Convert.ChangeType(blah, property.PropertyType));
                 }
                 else 
