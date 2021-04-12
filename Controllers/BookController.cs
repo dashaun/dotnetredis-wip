@@ -40,6 +40,7 @@ namespace dotnetredis.Controllers
         }
 
         [HttpGet]
+        [Route("search")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public IActionResult Search(string query)
