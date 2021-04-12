@@ -1,3 +1,5 @@
+using dotnetredis.Providers;
+using dotnetredis.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -31,6 +33,15 @@ namespace dotnetredis
             //JSON config for Redis instance
             services.AddStackExchangeRedisExtensions<NewtonsoftSerializer>(options 
                 => Configuration.GetSection("Redis").Get<RedisConfiguration>());
+            
+            //Add Redis healthcheck
+            services.AddHealthChecks()
+                .AddRedis(Configuration["Data:ConnectionStrings:Redis"]);
+            
+            //services.Configure<Redis>(Configuration);
+            services.AddSingleton<RedisProvider>();
+            services.AddTransient<BookService>();
+            services.AddTransient<CartService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -44,11 +55,8 @@ namespace dotnetredis
             }
 
             app.UseHttpsRedirection();
-
             app.UseRouting();
-
             app.UseAuthorization();
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
